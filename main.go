@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/skip2/go-qrcode"
 )
 
 type config struct {
@@ -30,6 +32,11 @@ func run() error {
 		return err
 	}
 	app.localIP = localIP
+
+	err = qrcode.WriteFile(fmt.Sprintf("http://%s:%d/static/", localIP, cfg.port), qrcode.Medium, 256, "./static/qr.png")
+	if err != nil {
+		return err
+	}
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", cfg.port),
