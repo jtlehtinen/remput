@@ -11,6 +11,7 @@ func (app *application) routes() http.Handler {
 	fs := http.FileServer(http.Dir("./static"))
 	router.Handle("/static/", http.StripPrefix("/static", fs))
 	router.HandleFunc("/", app.help)
+	router.HandleFunc("/ws", app.ws)
 
 	return router
 }
