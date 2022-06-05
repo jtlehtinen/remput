@@ -26,6 +26,7 @@ var upgrader = &websocket.Upgrader{
 }
 
 func (app *application) handleKey(key string) {
+	sendKey(int('a'))
 	log.Printf("key: %s", key)
 }
 
