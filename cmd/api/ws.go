@@ -1,18 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
-)
-
-const (
-	MessageTypeKey             = 0
-	MessageTypeMouseButtonDown = 1
-	MessageTypeMouseButtonUp   = 2
-	MessageTypeMouseMove       = 3
 )
 
 const (
@@ -23,33 +15,6 @@ const (
 var upgrader = &websocket.Upgrader{
 	ReadBufferSize:  socketBufferSize,
 	WriteBufferSize: socketBufferSize,
-}
-
-func (app *application) handleKey(key string) {
-	sendKey(int('a'))
-	log.Printf("key: %s", key)
-}
-
-func (app *application) handleMessage(message []byte) {
-	if len(message) == 0 {
-		return
-	}
-
-	type msg struct {
-		Type int `json:"type"`
-		Data any `json:"data"`
-	}
-
-	var m msg
-	err := json.Unmarshal(message, &m)
-	if err != nil {
-		return
-	}
-
-	switch m.Type {
-	case MessageTypeKey:
-		app.handleKey(m.Data.(string))
-	}
 }
 
 func (app *application) ws(w http.ResponseWriter, r *http.Request) {
