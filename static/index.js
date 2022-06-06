@@ -1,13 +1,16 @@
 import WebSocketClient from './ws.js';
+import Touch from './touch.js';
+
+const INVALID_KEY_CODE = -1;
 
 const VK_LBUTTON = 0x01;
 const VK_RBUTTON = 0x02;
 const VK_MBUTTON = 0x04;
 
 function toKeyCode(key) {
-  if (key === 'RMB') return VK_RBUTTON;
-  if (key === 'LMB') return VK_LBUTTON;
-  if (key === 'MMB') return VK_MBUTTON;
+  if (key === 0) return VK_LBUTTON;
+  if (key === 1) return VK_MBUTTON;
+  if (key === 2) return VK_RBUTTON;
 
   if (key >= 'A' && key <= 'Z')
     return key.charCodeAt(0);
@@ -25,7 +28,7 @@ function toKeyCode(key) {
     case '9': return 0x39;
   }
 
-  return 0;
+  return INVALID_KEY_CODE;
 }
 const MessageType = {
   KeyDown: 0,
@@ -38,35 +41,41 @@ const MessageType = {
 const app = {
   $: {
     root: document.querySelector('#root'),
+    keyboard: document.querySelector('#keyboard'),
+    status: document.querySelector('#status'),
+    buttonTouchpad: document.querySelector('#button-touchpad'),
+    buttonKeyboard: document.querySelector('#button-keyboard'),
   },
   init() {
-    const wsc = new WebSocketClient();
+    app.$.buttonTouchpad.onclick = () => {
+      app.$.buttonTouchpad.classList.toggle('active');
+    };
+
+    app.$.buttonKeyboard.onclick = () => {
+      app.$.buttonKeyboard.classList.toggle('active');
+    };
+
+    const wsc = new WebSocketClient(app.render, app.render);
     const hostname = window.location.hostname;
     const port = window.location.port;
     wsc.connect(`ws://${hostname}:${port}/ws`);
 
+    function handleShift() {
+      const layoutName = (keyboard.options.layoutName === 'default') ? 'shift' : 'default';
+      keyboard.setOptions({layoutName});
+    }
+
+    const Keyboard = window.SimpleKeyboard.default;
+    const keyboard = new Keyboard({
+      onChange: input => console.log(input),
+      onKeyPress: button => {
+        console.log(button);
+        if (button === "{shift}" || button === "{lock}") handleShift();
+      }
+    });
+
     app.mouseEnabled = false;
     app.wsc = wsc;
-
-    app.render();
-  },
-  render() {
-    const rows = [
-      ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-      ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
-    ];
-
-    const keysFragment = document.createDocumentFragment();
-    rows.forEach(row => {
-      const div = document.createElement('div');
-      row.forEach(key => {
-        const button = app.createElement('button', key);
-        button.onclick = () => app.onKey(key);
-        div.appendChild(button);
-      });
-      keysFragment.appendChild(div);
-    });
 
     document.oncontextmenu = event => {
       if (app.mouseEnabled) {
@@ -83,30 +92,28 @@ const app = {
 
     document.body.onmousemove = event => {
       if (!app.mouseEnabled) return;
-
-      const dx = event.movementX;
-      const dy = event.movementY;
-      app.onMouseMove(dx, dy);
+      app.onMouseMove(event.movementX, event.movementY);
     };
 
     document.body.onmousedown = event => {
       if (!app.mouseEnabled) return;
-      if (event.button === 0) app.onMouseButtonDown('LMB');
-      if (event.button === 1) app.onMouseButtonDown('MMB');
-      if (event.button === 2) app.onMouseButtonDown('RMB');
+      app.onMouseButtonDown(event.button);
       event.preventDefault();
     };
 
     document.body.onmouseup = event => {
       if (!app.mouseEnabled) return;
-      if (event.button === 0) app.onMouseButtonUp('LMB');
-      if (event.button === 1) app.onMouseButtonUp('MMB');
-      if (event.button === 2) app.onMouseButtonUp('RMB');
+      app.onMouseButtonUp(event.button);
       event.preventDefault();
     };
 
-    app.$.root.innerHTML = '';
-    app.$.root.appendChild(keysFragment);
+    app.render();
+  },
+  render() {
+    const connected = app.wsc.connected;
+    app.$.status.classList.remove('connected');
+    app.$.status.classList.remove('disconnected');
+    app.$.status.classList.add(connected ? 'connected' : 'disconnected');
   },
   createElement(tagName, textContent) {
     const e = document.createElement(tagName);
@@ -115,6 +122,7 @@ const app = {
   },
   onKey(key) {
     key = toKeyCode(key);
+    if (key === INVALID_KEY_CODE) return;
 
     app.wsc.send(JSON.stringify(
       {
@@ -132,6 +140,8 @@ const app = {
   },
   onMouseButtonDown(button) {
     button = toKeyCode(button);
+    if (button === INVALID_KEY_CODE) return;
+
     app.wsc.send(JSON.stringify(
       {
         type: MessageType.MouseButtonDown,
@@ -141,6 +151,8 @@ const app = {
   },
   onMouseButtonUp(button) {
     button = toKeyCode(button);
+    if (button === INVALID_KEY_CODE) return;
+
     app.wsc.send(JSON.stringify(
       {
         type: MessageType.MouseButtonUp,
@@ -149,7 +161,6 @@ const app = {
     ));
   },
   onMouseMove(dx, dy) {
-    console.log(`move: ${dx}x${dy}`);
     const scale = 2;
     dx *= scale;
     dy *= scale;

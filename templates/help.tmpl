@@ -5,15 +5,36 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>remput</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    h1 {
+      color: gray;
+    }
+
+    ol li {
+      margin-bottom: 0.7em;
+    }
+
+    .container {
+      width: 60%;
+    }
+  </style>
 </head>
 <body>
-  <h1>remput help page</h1>
+  <div class="container">
+    <h1>remput help</h1>
 
-  <p>
-  Connect your device to the same LAN as the server. Then open a web browser
-  and visit <a href="https://{{.IP}}:{{.Port}}/static/">remput client</a>
-  or scan the QR code below.
-  </p>
-  <img src="/static/qr.png"/>
+    <ol>
+      <li>Connect your device to the same LAN as the server.</li>
+      <li>Open a web browser and visit <a href="http://{{.IP}}:{{.Port}}/static/">remput client</a>
+    or scan the QR code below.</li>
+    </ol>
+    <img src="/static/qr.png"/>
+  </div>
 </body>
 </html>

@@ -6,10 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>remput client</title>
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
 </head>
 <body>
-  <h1>remput client page</h1>
+  <header>
+    <h1>remput <span id="status" class="connected"></span></h1>
+    <div>
+      <span id="button-touchpad" class="icon icon-button">
+        <!-- License: https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M4 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m0 2v8h16V5H4m0 14h7v-4H4v4m16 0v-4h-7v4h7Z"></path></svg>
+      </span>
+      <span id="button-keyboard" class="icon icon-button">
+        <!-- License: https://github.com/iconify/iconify/blob/master/packages/iconify/license.txt -->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" viewBox="0 0 15 15"><path fill="currentColor" fill-rule="evenodd" d="M13.5 4h-12a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h12a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5Zm-12-1A1.5 1.5 0 0 0 0 4.5v6A1.5 1.5 0 0 0 1.5 12h12a1.5 1.5 0 0 0 1.5-1.5v-6A1.5 1.5 0 0 0 13.5 3h-12ZM2 5h1v1H2V5Zm3 0H4v1h1V5Zm1 0h1v1H6V5Zm3 0H8v1h1V5Zm1 0h1v1h-1V5Zm3 0h-1v1h1V5Zm-2 2h1v1h-1V7Zm2 2h-1v1h1V9ZM9 7h1v1H9V7ZM8 7H7v1h1V7ZM5 7h1v1H5V7ZM4 7H3v1h1V7ZM2 9h1v1H2V9Zm9 0H4v1h7V9Z" clip-rule="evenodd"></path></svg>
+      </span>
+    </div>
+  </header>
+
   <div id="root"></div>
+  <div class="simple-keyboard"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
   <script type="module" src="index.js"></script>
 </body>
 </html>

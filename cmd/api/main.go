@@ -61,7 +61,8 @@ func run() error {
 	}
 
 	fmt.Printf("starting server at %s\n", server.Addr)
-	return server.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
+	//return server.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
+	return server.ListenAndServe()
 }
 
 func main() {

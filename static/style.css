@@ -11,5 +11,80 @@ html {
 body {
   width: 100vw;
   height: 100vh;
-  background-color: rgb(150, 222, 167);
+  font-family: 'Arial', sans-serif;
+  padding: 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+header h1 {
+  text-align: left;
+  color: gray;
+  display: inline-block;
+}
+
+svg {
+  vertical-align: middle;
+  width: auto;
+  height: 1em;
+}
+
+#status {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  transform: translateY(-150%);
+}
+
+.disconnected {
+  background-color: #ff3c41;
+}
+
+.connected {
+  background-color: #47cf73;
+}
+
+.simple-keyboard {
+  position: fixed;
+  bottom: 0;
+}
+
+.icon {
+  font-size: 2.0em;
+  position: relative;
+  display: inline-block;
+}
+
+.icon-button {
+  color: lightgray;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.icon-button.active {
+  color: gray;
+}
+
+/*
+  prevent hover effect on touch devices, otherwise hover
+  state may stay active when it should not
+*/
+@media (hover: hover) {
+  .icon-button:hover {
+    color: gray;
+  }
+}
+
+.icon-button.active:after {
+  background-color: gray;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
 }
