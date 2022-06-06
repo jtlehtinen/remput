@@ -6,22 +6,12 @@ import (
 
 var (
 	native                     = syscall.NewLazyDLL("native.dll")
-	nativeSendKeyDown          = native.NewProc("send_key_down")
-	nativeSendKeyUp            = native.NewProc("send_key_up")
 	nativeSendKey              = native.NewProc("send_key")
 	nativeSendMouseButtonDown  = native.NewProc("send_mouse_button_down")
 	nativeSendMouseButtonUp    = native.NewProc("send_mouse_button_up")
 	nativeSendMouseButtonClick = native.NewProc("send_mouse_button_click")
 	nativeSendMouseMove        = native.NewProc("send_mouse_move")
 )
-
-func sendKeyDown(key int) {
-	_, _, _ = syscall.SyscallN(nativeSendKeyDown.Addr(), uintptr(key))
-}
-
-func sendKeyUp(key int) {
-	_, _, _ = syscall.SyscallN(nativeSendKeyUp.Addr(), uintptr(key))
-}
 
 // sendKey sends a key down event followed by a key up event.
 func sendKey(key int) {

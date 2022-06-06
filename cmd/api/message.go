@@ -6,33 +6,21 @@ import (
 )
 
 const (
-	MessageTypeKeyDown         = 0
-	MessageTypeKeyUp           = 1
-	MessageTypeMouseButtonDown = 2
-	MessageTypeMouseButtonUp   = 3
-	MessageTypeMouseMove       = 4
+	MessageTypeKey             = 0
+	MessageTypeMouseButtonDown = 1
+	MessageTypeMouseButtonUp   = 2
+	MessageTypeMouseMove       = 3
 )
 
-func (app *application) handleKeyDownMessage(message json.RawMessage) {
+func (app *application) handleKeyMessage(message json.RawMessage) {
 	type Message struct {
 		Key int `json:"key"`
 	}
 
 	var m Message
 	_ = json.Unmarshal(message, &m)
-	sendKeyDown(m.Key)
+	sendKey(m.Key)
 	log.Printf("key down: %d", m.Key)
-}
-
-func (app *application) handleKeyUpMessage(message json.RawMessage) {
-	type Message struct {
-		Key int `json:"key"`
-	}
-
-	var m Message
-	_ = json.Unmarshal(message, &m)
-	sendKeyUp(m.Key)
-	log.Printf("key up: %d", m.Key)
 }
 
 func (app *application) handleMouseButtonDown(message json.RawMessage) {
@@ -84,10 +72,8 @@ func (app *application) handleMessage(message []byte) {
 	}
 
 	switch m.Type {
-	case MessageTypeKeyDown:
-		app.handleKeyDownMessage(m.Message)
-	case MessageTypeKeyUp:
-		app.handleKeyUpMessage(m.Message)
+	case MessageTypeKey:
+		app.handleKeyMessage(m.Message)
 	case MessageTypeMouseButtonDown:
 		app.handleMouseButtonDown(m.Message)
 	case MessageTypeMouseButtonUp:

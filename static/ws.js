@@ -18,6 +18,7 @@ class WebSocketClient {
     ws.onclose = event => {
       this.connected = false;
       this.ws = null;
+      this.ondisconnected();
     };
 
     ws.onmessage = event => {
@@ -33,13 +34,12 @@ class WebSocketClient {
     if (!this.connected) return;
 
     this.ws.close();
-    this.ondisconnected();
   }
 
   send(message) {
     if (!this.connected) return;
 
-    this.ws.send(message);
+    this.ws.send(JSON.stringify(message));
   }
 };
 

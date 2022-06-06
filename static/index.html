@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    Disable user-initiated zoom... touch movement doesn't work well
+    when the page is zoomed.
+    @TODO: ofc this does not work...
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>remput client</title>
   <link rel="stylesheet" href="/static/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
@@ -24,7 +29,7 @@
   </header>
 
   <div id="root"></div>
-  <div class="simple-keyboard"></div>
+  <div id="keyboard" class="simple-keyboard"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
   <script type="module" src="index.js"></script>
