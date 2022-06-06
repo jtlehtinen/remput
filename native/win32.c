@@ -25,7 +25,7 @@ static int to_vkcode(int key) {
   return INVALID_KEY;
 }
 
-static int is_ascii(int key) {
+static int is_ascii_printable(int key) {
   return key >= 0x20 && key <= 0x7e;
 }
 
@@ -47,7 +47,7 @@ static void send_character(int c) {
 }
 
 __declspec(dllexport) void send_key(int key) {
-  if (is_ascii(key)) {
+  if (is_ascii_printable(key)) {
     send_character(key);
   } else {
     key = to_vkcode(key);
